@@ -8,6 +8,8 @@ import br.com.challenge.forumhub.domain.repository.TopicoRepository;
 import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TopicoService {
 
@@ -42,5 +44,20 @@ public class TopicoService {
                 salvo.getAutor(),
                 salvo.getCurso()
         );
+    }
+
+    public List<TopicoResponse> listar(){
+        return repository.findAll()
+                .stream()
+                .map(t -> new TopicoResponse(
+                        t.getId(),
+                        t.getTitulo(),
+                        t.getMensagem(),
+                        t.getDataCriacao(),
+                        t.getEstado(),
+                        t.getAutor(),
+                        t.getCurso()
+                ))
+                .toList();
     }
 }
