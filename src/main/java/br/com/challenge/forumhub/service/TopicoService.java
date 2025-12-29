@@ -7,14 +7,8 @@ import br.com.challenge.forumhub.domain.enums.EstadoTopico;
 import br.com.challenge.forumhub.domain.repository.TopicoRepository;
 import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class TopicoService {
@@ -52,9 +46,23 @@ public class TopicoService {
         );
     }
 
-    public Page<TopicoResponse> listar(Pageable paginacao) {
+    public Page<TopicoResponse> listarTodosOsTopicos(Pageable paginacao) {
         return repository.findAll(paginacao)
                 .map(t -> new TopicoResponse(
+                        t.getId(),
+                        t.getTitulo(),
+                        t.getMensagem(),
+                        t.getDataCriacao(),
+                        t.getEstado(),
+                        t.getAutor(),
+                        t.getCurso()
+                ));
+    }
+
+    public Page<TopicoResponse> listarPorCursoEAno(String curso, int ano, Pageable paginacao) {
+        Page<Topico> page = repository.findByCursoEAno(curso, ano, paginacao);
+
+                return page.map(t -> new TopicoResponse(
                         t.getId(),
                         t.getTitulo(),
                         t.getMensagem(),

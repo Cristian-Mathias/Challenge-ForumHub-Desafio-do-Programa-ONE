@@ -32,8 +32,18 @@ public class TopicoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TopicoResponse>> listar(@PageableDefault(size = 10, sort = "dataCriacao", direction = Sort.Direction.ASC)Pageable paginacao){
-        Page<TopicoResponse> page =  service.listar(paginacao);
+    public ResponseEntity<Page<TopicoResponse>> listarTodosOsTopicos(@PageableDefault(size = 10, sort = "dataCriacao", direction = Sort.Direction.ASC)Pageable paginacao){
+        Page<TopicoResponse> page =  service.listarTodosOsTopicos(paginacao);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<Page<TopicoResponse>> listarPorCursoEAno(
+            @RequestParam String curso,
+            @RequestParam int ano,
+            @PageableDefault(size = 10, sort = "dataCriacao", direction = Sort.Direction.ASC) Pageable paginacao
+    ) {
+        Page<TopicoResponse> page = service.listarPorCursoEAno(curso,ano,paginacao);
         return ResponseEntity.ok(page);
     }
 }
