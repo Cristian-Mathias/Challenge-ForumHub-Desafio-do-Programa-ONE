@@ -6,6 +6,12 @@ import br.com.challenge.forumhub.domain.entity.Topico;
 import br.com.challenge.forumhub.domain.enums.EstadoTopico;
 import br.com.challenge.forumhub.domain.repository.TopicoRepository;
 import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,9 +52,8 @@ public class TopicoService {
         );
     }
 
-    public List<TopicoResponse> listar(){
-        return repository.findAll()
-                .stream()
+    public Page<TopicoResponse> listar(Pageable paginacao) {
+        return repository.findAll(paginacao)
                 .map(t -> new TopicoResponse(
                         t.getId(),
                         t.getTitulo(),
@@ -57,7 +62,6 @@ public class TopicoService {
                         t.getEstado(),
                         t.getAutor(),
                         t.getCurso()
-                ))
-                .toList();
+                ));
     }
 }
