@@ -1,0 +1,39 @@
+package br.com.challenge.forumhub.service;
+
+import br.com.challenge.forumhub.domain.dto.TopicoRequest;
+import br.com.challenge.forumhub.domain.dto.TopicoResponse;
+import br.com.challenge.forumhub.domain.entity.Topico;
+import br.com.challenge.forumhub.domain.enums.EstadoTopico;
+import br.com.challenge.forumhub.domain.repository.TopicoRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+public class TopicoService {
+
+    private final TopicoRepository repository;
+
+    public TopicoService(TopicoRepository repository) {
+        this.repository = repository;
+    }
+
+    public TopicoResponse criar(TopicoRequest request){
+        Topico topico = new Topico();
+        topico.setTitulo(request.titulo());
+        topico.setMensagem(request.mensagem());
+        topico.setAutor(request.autor());
+        topico.setCurso(request.curso());
+        topico.setEstado(EstadoTopico.ABERTO);
+
+        Topico salvo = repository.save(topico);
+
+        return new TopicoResponse(
+                salvo.getId(),
+                salvo.getTitulo(),
+                salvo.getMensagem(),
+                salvo.getDataCriacao(),
+                salvo.getEstado(),
+                salvo.getAutor(),
+                salvo.getCurso()
+        );
+    }
+}
