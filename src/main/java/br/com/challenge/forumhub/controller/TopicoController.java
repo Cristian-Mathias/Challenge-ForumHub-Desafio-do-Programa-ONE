@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/topicos")
+@RequestMapping(path ="/topicos")
 public class TopicoController {
 
     private final TopicoService service;
