@@ -5,6 +5,7 @@ import br.com.challenge.forumhub.domain.dto.TopicoResponse;
 import br.com.challenge.forumhub.domain.entity.Topico;
 import br.com.challenge.forumhub.domain.enums.EstadoTopico;
 import br.com.challenge.forumhub.domain.repository.TopicoRepository;
+import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,12 @@ public class TopicoService {
     }
 
     public TopicoResponse criar(TopicoRequest request){
+
+        if (repository.existsByTituloAndMensagem(request.titulo(), request.mensagem())){
+            throw new TopicoDuplicadoException("Já existe um tópico com o mesmo título e mensagem.");
+        }
+
+
         Topico topico = new Topico();
         topico.setTitulo(request.titulo());
         topico.setMensagem(request.mensagem());
