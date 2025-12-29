@@ -1,0 +1,2 @@
+ALTER TABLE topicos
+ALTER COLUMN estado_topico TYPE VARCHAR(20);
