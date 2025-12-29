@@ -7,6 +7,8 @@ public record TopicoRequest(
         String titulo,
         @NotBlank
         String mensagem,
+        @NotBlank
         String autor,
+        @NotBlank
         String curso
 ) {}
