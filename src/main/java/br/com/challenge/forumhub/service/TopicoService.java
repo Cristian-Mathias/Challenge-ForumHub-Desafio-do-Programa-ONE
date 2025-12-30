@@ -1,5 +1,6 @@
 package br.com.challenge.forumhub.service;
 
+import br.com.challenge.forumhub.domain.dto.DadosAtualizacaoTopico;
 import br.com.challenge.forumhub.domain.dto.TopicoRequest;
 import br.com.challenge.forumhub.domain.dto.TopicoResponse;
 import br.com.challenge.forumhub.domain.entity.Topico;
@@ -8,9 +9,12 @@ import br.com.challenge.forumhub.domain.repository.TopicoRepository;
 import br.com.challenge.forumhub.exception.RecursoNaoEncontradoException;
 import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class TopicoService {
@@ -88,5 +92,43 @@ public class TopicoService {
                 topico.getAutor(),
                 topico.getCurso()
         );
+    }
+
+
+    public TopicoResponse atualizar(Long id , DadosAtualizacaoTopico dados) {
+
+        Optional<Topico> optionalTopico = repository.findById(id);
+
+        if (optionalTopico.isPresent()) {
+            Topico topico = optionalTopico.get();
+
+            topico.setTitulo(dados.titulo());
+            topico.setMensagem(dados.mensagem());
+            topico.setAutor(dados.autor());
+            topico.setCurso(dados.curso());
+
+            repository.save(topico);
+
+            return new TopicoResponse(
+                    topico.getId(),
+                    topico.getTitulo(),
+                    topico.getMensagem(),
+                    topico.getDataCriacao(),
+                    topico.getEstado(),
+                    topico.getAutor(),
+                    topico.getCurso()
+            );
+        }
+        throw  new RecursoNaoEncontradoException("Tópico não encontrado para atualização");
+    }
+
+    public void excluir(Long id){
+        Optional<Topico> optionalTopico = repository.findById(id);
+
+        if(optionalTopico.isPresent()){
+            repository.deleteById(id);
+        }else {
+            throw new RecursoNaoEncontradoException("Tópico não encontrado para exclusão");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package br.com.challenge.forumhub.controller;
 
+import br.com.challenge.forumhub.domain.dto.DadosAtualizacaoTopico;
 import br.com.challenge.forumhub.domain.dto.TopicoRequest;
 import br.com.challenge.forumhub.domain.dto.TopicoResponse;
 import br.com.challenge.forumhub.service.TopicoService;
@@ -48,5 +49,17 @@ public class TopicoController {
     public ResponseEntity<TopicoResponse>buscarPorId(@PathVariable Long id){
         TopicoResponse response = service.buscarPorId(id);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TopicoResponse> atualizar(@PathVariable Long id , @RequestBody DadosAtualizacaoTopico dados){
+        TopicoResponse response = service.atualizar(id, dados);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void>excluir(@PathVariable Long id){
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }
