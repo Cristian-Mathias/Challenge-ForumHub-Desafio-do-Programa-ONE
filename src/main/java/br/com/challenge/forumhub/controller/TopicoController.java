@@ -2,7 +2,6 @@ package br.com.challenge.forumhub.controller;
 
 import br.com.challenge.forumhub.domain.dto.TopicoRequest;
 import br.com.challenge.forumhub.domain.dto.TopicoResponse;
-import br.com.challenge.forumhub.domain.entity.Topico;
 import br.com.challenge.forumhub.service.TopicoService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -12,8 +11,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path ="/topicos")
@@ -45,5 +42,11 @@ public class TopicoController {
     ) {
         Page<TopicoResponse> page = service.listarPorCursoEAno(curso,ano,paginacao);
         return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TopicoResponse>buscarPorId(@PathVariable Long id){
+        TopicoResponse response = service.buscarPorId(id);
+        return ResponseEntity.ok(response);
     }
 }

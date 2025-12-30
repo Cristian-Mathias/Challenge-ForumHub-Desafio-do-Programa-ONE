@@ -5,7 +5,9 @@ import br.com.challenge.forumhub.domain.dto.TopicoResponse;
 import br.com.challenge.forumhub.domain.entity.Topico;
 import br.com.challenge.forumhub.domain.enums.EstadoTopico;
 import br.com.challenge.forumhub.domain.repository.TopicoRepository;
+import br.com.challenge.forumhub.exception.RecursoNaoEncontradoException;
 import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -71,5 +73,20 @@ public class TopicoService {
                         t.getAutor(),
                         t.getCurso()
                 ));
+    }
+
+    public TopicoResponse buscarPorId(Long id){
+        Topico topico = repository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tópico não encontrado"));
+
+        return new TopicoResponse(
+                topico.getId(),
+                topico.getTitulo(),
+                topico.getMensagem(),
+                topico.getDataCriacao(),
+                topico.getEstado(),
+                topico.getAutor(),
+                topico.getCurso()
+        );
     }
 }
