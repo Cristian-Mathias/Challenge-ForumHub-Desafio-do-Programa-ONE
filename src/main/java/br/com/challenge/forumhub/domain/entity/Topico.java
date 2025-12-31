@@ -1,6 +1,8 @@
 package br.com.challenge.forumhub.domain.entity;
 
 import br.com.challenge.forumhub.domain.enums.EstadoTopico;
+import br.com.challenge.forumhub.exception.TopicoJaAtivoException;
+import br.com.challenge.forumhub.exception.TopicoJaInativoException;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -81,5 +83,19 @@ public class Topico {
     @PrePersist
     public void prePersist(){
         this.dataCriacao = LocalDateTime.now();
+    }
+
+    public void ativar(){
+        if(this.estado == EstadoTopico.ATIVO){
+            throw new TopicoJaAtivoException();
+        }
+        this.estado = EstadoTopico.ATIVO;
+    }
+
+    public void inativar(){
+        if (this.estado == EstadoTopico.INATIVO){
+            throw new TopicoJaInativoException();
+        }
+        this.estado = EstadoTopico.INATIVO;
     }
 }

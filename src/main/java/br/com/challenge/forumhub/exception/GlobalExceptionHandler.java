@@ -34,4 +34,34 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
     }
+
+    @ExceptionHandler(TopicoJaAtivoException.class)
+    public ResponseEntity<ErroPadrao> tratarTopicoJaAtivo(
+            TopicoJaAtivoException exception,
+            HttpServletRequest request) {
+
+        ErroPadrao erro = new ErroPadrao(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(TopicoJaInativoException.class)
+    public ResponseEntity<ErroPadrao> tratarTopicoJaInativo(
+            TopicoJaInativoException exception,
+            HttpServletRequest request) {
+
+        ErroPadrao erro = new ErroPadrao(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
 }

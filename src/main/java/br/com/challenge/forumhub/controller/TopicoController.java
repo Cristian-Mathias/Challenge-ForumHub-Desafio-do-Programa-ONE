@@ -62,4 +62,16 @@ public class TopicoController {
         service.excluir(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/inativar/{id}")
+    public ResponseEntity<Void> inativar(@PathVariable Long id){
+        service.inativar(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/ativar/{id}")
+    public ResponseEntity<Void> ativar(@PathVariable Long id){
+        service.ativar(id);
+        return ResponseEntity.noContent().build();
+    }
 }

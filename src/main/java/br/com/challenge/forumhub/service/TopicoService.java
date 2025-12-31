@@ -8,11 +8,10 @@ import br.com.challenge.forumhub.domain.enums.EstadoTopico;
 import br.com.challenge.forumhub.domain.repository.TopicoRepository;
 import br.com.challenge.forumhub.exception.RecursoNaoEncontradoException;
 import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public class TopicoService {
     public TopicoResponse criar(TopicoRequest request){
 
         if (repository.existsByTituloAndMensagem(request.titulo(), request.mensagem())){
-            throw new TopicoDuplicadoException("Já existe um tópico com o mesmo título e mensagem.");
+            throw new TopicoDuplicadoException("Já existe um tópico com o mesmo título e mensagem!");
         }
 
 
@@ -37,7 +36,7 @@ public class TopicoService {
         topico.setMensagem(request.mensagem());
         topico.setAutor(request.autor());
         topico.setCurso(request.curso());
-        topico.setEstado(EstadoTopico.ABERTO);
+        topico.setEstado(EstadoTopico.ATIVO);
 
         Topico salvo = repository.save(topico);
 
@@ -81,7 +80,7 @@ public class TopicoService {
 
     public TopicoResponse buscarPorId(Long id){
         Topico topico = repository.findById(id)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Tópico não encontrado"));
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tópico não encontrado!"));
 
         return new TopicoResponse(
                 topico.getId(),
@@ -119,7 +118,7 @@ public class TopicoService {
                     topico.getCurso()
             );
         }
-        throw  new RecursoNaoEncontradoException("Tópico não encontrado para atualização");
+        throw  new RecursoNaoEncontradoException("Tópico não encontrado para atualização!");
     }
 
     public void excluir(Long id){
@@ -128,7 +127,22 @@ public class TopicoService {
         if(optionalTopico.isPresent()){
             repository.deleteById(id);
         }else {
-            throw new RecursoNaoEncontradoException("Tópico não encontrado para exclusão");
+            throw new RecursoNaoEncontradoException("Tópico não encontrado para exclusão!");
         }
+    }
+
+    @Transactional
+    public void inativar(Long id){
+        Topico topico = repository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tópico não encontrado para ser inativado!"));
+
+        topico.inativar();
+    }
+
+    @Transactional
+    public void ativar(Long id){
+        Topico topico =repository.findById(id)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Tópico não encontrado para ser inativado!"));
+        topico.ativar();
     }
 }

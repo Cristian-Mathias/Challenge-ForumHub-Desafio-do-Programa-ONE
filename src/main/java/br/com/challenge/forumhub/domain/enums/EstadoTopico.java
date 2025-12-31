@@ -1,7 +1,7 @@
 package br.com.challenge.forumhub.domain.enums;
 
 public enum EstadoTopico {
-    ABERTO,
-    FECHADO,
+    ATIVO,
+    INATIVO,
     EM_ANALISE
 }
