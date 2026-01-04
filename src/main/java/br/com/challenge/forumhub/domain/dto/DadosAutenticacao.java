@@ -1,6 +1,8 @@
 package br.com.challenge.forumhub.domain.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record DadosAutenticacao(
-        String login,
-        String senha) {
+        @NotBlank String login,
+        @NotBlank String senha) {
 }
