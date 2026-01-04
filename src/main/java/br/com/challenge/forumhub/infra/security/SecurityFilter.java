@@ -1,8 +1,10 @@
 package br.com.challenge.forumhub.infra.security;
 
+import br.com.challenge.forumhub.domain.dto.erro.ErroPadrao;
 import br.com.challenge.forumhub.domain.repository.UsuarioRepository;
 import br.com.challenge.forumhub.exception.TokenInvalidoException;
 import br.com.challenge.forumhub.service.TokenService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -24,6 +27,8 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     private UsuarioRepository repository;
+
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
@@ -49,6 +54,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             if (usuario == null) {
                 throw new TokenInvalidoException("Usuário não encontrado para este token");
             }
+
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
                             usuario,

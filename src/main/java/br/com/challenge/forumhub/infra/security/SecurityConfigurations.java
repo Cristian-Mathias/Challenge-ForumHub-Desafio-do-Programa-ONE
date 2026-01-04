@@ -20,10 +20,12 @@ public class SecurityConfigurations {
 
     private final SecurityFilter securityFilter;
     private final AutenticacaoService autenticacaoService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-    public SecurityConfigurations(SecurityFilter securityFilter, AutenticacaoService autenticacaoService) {
+    public SecurityConfigurations(SecurityFilter securityFilter, AutenticacaoService autenticacaoService, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) {
         this.securityFilter = securityFilter;
         this.autenticacaoService = autenticacaoService;
+        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
     }
 
     @Bean
@@ -36,6 +38,9 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(handler ->
+                        handler.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
