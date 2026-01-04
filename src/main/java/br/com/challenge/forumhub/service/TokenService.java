@@ -15,8 +15,11 @@ import java.time.ZoneOffset;
 @Service
 public class TokenService {
 
-    @Value("${api.security.token.secret}")
+    @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.expiration}")
+    private Long expiration;
 
     private static final String ISSUER = "forumhub-api";
 
@@ -48,6 +51,8 @@ public class TokenService {
     }
 
     private Instant dataExpiracao() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-03:00"));
+        return LocalDateTime.now()
+                .plusSeconds(expiration)
+                .toInstant(ZoneOffset.of("-03:00"));
     }
 }
