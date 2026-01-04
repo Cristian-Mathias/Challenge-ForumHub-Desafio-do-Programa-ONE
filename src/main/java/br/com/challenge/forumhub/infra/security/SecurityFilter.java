@@ -1,6 +1,7 @@
 package br.com.challenge.forumhub.infra.security;
 
 import br.com.challenge.forumhub.domain.repository.UsuarioRepository;
+import br.com.challenge.forumhub.exception.TokenInvalidoException;
 import br.com.challenge.forumhub.service.TokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 @Component
@@ -37,27 +39,32 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String tokenJWT = recuperarToken(request);
 
-        if (tokenJWT != null) {
-            try {
-                String subject = tokenService.getSubject(tokenJWT);
-                UserDetails usuario = repository.findByLogin(subject);
-
-                if (usuario != null) {
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(
-                                    usuario,
-                                    null,
-                                    usuario.getAuthorities()
-                            );
-
-                    SecurityContextHolder.getContext()
-                            .setAuthentication(authentication);
-                }
-
-            } catch (RuntimeException ex) {
-                SecurityContextHolder.clearContext();
-            }
+        if (tokenJWT == null) {
+            throw new TokenInvalidoException("Token JWT não fornecido");
         }
+        try {
+            String subject = tokenService.getSubject(tokenJWT);
+            UserDetails usuario = repository.findByLogin(subject);
+
+            if (usuario == null) {
+                throw new TokenInvalidoException("Usuário não encontrado para este token");
+            }
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(
+                            usuario,
+                            null,
+                            usuario.getAuthorities()
+                    );
+
+            SecurityContextHolder.getContext()
+                    .setAuthentication(authentication);
+
+
+        } catch (RuntimeException ex) {
+            SecurityContextHolder.clearContext();
+            throw new TokenInvalidoException("Token JWT inválido ou expirado");
+        }
+
 
         filterChain.doFilter(request, response);
     }

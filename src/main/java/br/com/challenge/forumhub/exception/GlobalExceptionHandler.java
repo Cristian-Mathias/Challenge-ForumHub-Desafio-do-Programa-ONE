@@ -63,4 +63,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
     }
+
+    @ExceptionHandler(TokenInvalidoException.class)
+    public ResponseEntity<ErroPadrao> tratarTokenInvalido(TokenInvalidoException  exception, HttpServletRequest request){
+        ErroPadrao erro = new ErroPadrao(
+                HttpStatus.UNAUTHORIZED.value(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
+    }
 }
