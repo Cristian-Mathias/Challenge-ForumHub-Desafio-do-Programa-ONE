@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface TopicoRepository extends JpaRepository<Topico, Long> {
     boolean existsByTituloAndMensagem(String titulo, String mensagem);
 
@@ -15,4 +17,6 @@ public interface TopicoRepository extends JpaRepository<Topico, Long> {
     Page<Topico>findByCursoEAno(@Param("curso") String curso, @Param("ano") int ano,@Param("estado") EstadoTopico estado, Pageable pageable);
 
     Page<Topico> findByEstado(EstadoTopico estado, Pageable pageable);
+
+    Optional<Topico> findByIdAndEstado(Long id , EstadoTopico estado);
 }

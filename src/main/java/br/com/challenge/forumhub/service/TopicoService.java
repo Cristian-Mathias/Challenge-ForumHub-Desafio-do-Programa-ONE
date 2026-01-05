@@ -78,7 +78,7 @@ public class TopicoService {
     }
 
     public TopicoResponse buscarPorId(Long id){
-        Topico topico = repository.findById(id)
+        Topico topico = repository.findByIdAndEstado(id,EstadoTopico.ATIVO)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Tópico não encontrado!"));
 
         return new TopicoResponse(
