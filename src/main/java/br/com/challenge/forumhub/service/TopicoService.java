@@ -51,7 +51,7 @@ public class TopicoService {
     }
 
     public Page<TopicoResponse> listarTodosOsTopicos(Pageable paginacao) {
-        return repository.findAll(paginacao)
+        return repository.findByEstado(EstadoTopico.ATIVO, paginacao)
                 .map(t -> new TopicoResponse(
                         t.getId(),
                         t.getTitulo(),
@@ -64,7 +64,7 @@ public class TopicoService {
     }
 
     public Page<TopicoResponse> listarPorCursoEAno(String curso, int ano, Pageable paginacao) {
-        Page<Topico> page = repository.findByCursoEAno(curso, ano, paginacao);
+        Page<Topico> page = repository.findByCursoEAno(curso, ano,EstadoTopico.ATIVO ,paginacao);
 
                 return page.map(t -> new TopicoResponse(
                         t.getId(),
