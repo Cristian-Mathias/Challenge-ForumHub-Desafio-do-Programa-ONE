@@ -231,6 +231,72 @@ Os testes podem ser realizados utilizando:
 ---
 
 ##  Demonstração
-- Capturas de tela das requisições no Postman/Insomnia
-- Prints das respostas da API
-- (Opcional) Vídeo demonstrando a aplicação em funcionamento
+Esta seção apresenta evidências do funcionamento da API por meio de capturas de tela das requisições e respostas realizadas no Postman/Postgres.
+
+###  Autenticação (JWT)
+Requisição de login para geração do token JWT.
+
+- Login de usuário
+![Autenticação JWT 200 ok](docs/images/Autenticação-JWT-200.png)
+- Passando email errado
+![Autenticação JWT email 401](docs/images/Autenticação-JWT-email-401.png)
+- Passando senha errada
+![Autenticação JWT senha 401](docs/images/Autenticação-JWT-senha-401.png)
+
+###  Cadastro de tópico
+Criação de um novo tópico enviando os dados no corpo da requisição.
+
+- Cadastrar tópico
+![Cadastro de tópico](docs/images/Cadastro-de-tópicos-201.png)
+- Cadastrar tópico sem token
+![Cadastro de tópico](docs/images/Cadastro-de-tópicos-401.png)
+
+###  Listagem de tópicos
+Listagem dos tópicos ativos cadastrados no sistema.
+- Listar tópicos
+![Listagem de tópicos](docs/images/Listagem-de-tópicos-200-1.png)
+![Listagem de tópicos](docs/images/Listagem-de-tópicos-200.png)
+- Listar tópicos sem token
+![Listagem de tópicos](docs/images/Listagem-de-tópicos-401.png)
+
+###  Detalhamento de tópico
+Consulta dos dados de um tópico específico por ID.
+
+- Listar por ID
+![Detalhamento de tópico](docs/images/Listagem-por-id-200.png)
+- Listar por ID sem token
+![Detalhamento de tópico](docs/images/Listagem-por-id-401.png)
+- Listar por ID inexistente
+![Detalhamento de tópico](docs/images/Listagem-por-id-404.png)
+
+###  Atualização de tópico
+Atualização das informações de um tópico existente.
+
+- Atualizar tópico
+![Atualização de tópico](docs/images/Atualizar-tópico-200.png)
+- Atualizar tópico sem token
+![Atualização de tópico](docs/images/Atualizar-tópico-401.png)
+- Atualizar tópico inativo
+![Atualização de tópico](docs/images/Atualizar-tópico-409.png)
+
+###  Exclusão física de tópico
+Remoção definitiva do tópico do banco de dados.
+
+- Exclusão física de tópico
+![Inativação de tópico](docs/images/Exclusão-física-204.png)
+- Exclusão física sem token
+![Inativação de tópico](docs/images/Exclusão-física-401.png)
+- Exclusão física de tópico inexistente
+![Inativação de tópico](docs/images/Exclusão-física-404.png)
+
+
+###  Inativação / Ativação de tópico
+Alteração do status do tópico utilizando exclusão lógica.
+
+- Inativar tópico com id 2
+![Inativação de tópico](docs/images/Exclusão-lógica-204.png)
+![Inativação de tópico](docs/images/Exclusão-lógica-inativo.png)
+- Ativar tópico com id 2
+![Inativação de tópico](docs/images/Exclusão-lógica-ativo.png)
+![Inativação de tópico](docs/images/Exclusão-lógica-ativo2.png)
+
