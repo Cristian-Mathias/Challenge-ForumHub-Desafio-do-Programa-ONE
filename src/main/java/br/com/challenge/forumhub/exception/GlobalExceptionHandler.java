@@ -74,4 +74,19 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(erro);
     }
+
+    @ExceptionHandler(RegraNegocioException.class)
+    public ResponseEntity<ErroPadrao> tratarRegraNegocio(
+            RegraNegocioException exception,
+            HttpServletRequest request) {
+
+        ErroPadrao erro = new ErroPadrao(
+                HttpStatus.CONFLICT.value(),
+                exception.getMessage(),
+                request.getRequestURI(),
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
 }

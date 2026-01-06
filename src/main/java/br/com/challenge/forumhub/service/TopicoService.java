@@ -7,6 +7,7 @@ import br.com.challenge.forumhub.domain.entity.Topico;
 import br.com.challenge.forumhub.domain.enums.EstadoTopico;
 import br.com.challenge.forumhub.domain.repository.TopicoRepository;
 import br.com.challenge.forumhub.exception.RecursoNaoEncontradoException;
+import br.com.challenge.forumhub.exception.RegraNegocioException;
 import br.com.challenge.forumhub.exception.TopicoDuplicadoException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -99,6 +100,11 @@ public class TopicoService {
 
         if (optionalTopico.isPresent()) {
             Topico topico = optionalTopico.get();
+
+            if(topico.getEstado() == EstadoTopico.INATIVO){
+                throw new RegraNegocioException("Tópico inativo não pode ser atualizado");
+            }
+
 
             topico.setTitulo(dados.titulo());
             topico.setMensagem(dados.mensagem());
