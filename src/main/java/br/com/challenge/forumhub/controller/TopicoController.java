@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping(path ="/topicos")
@@ -30,7 +31,7 @@ public class TopicoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<TopicoResponse>> listarTodosOsTopicos(@PageableDefault(size = 10, sort = "dataCriacao", direction = Sort.Direction.ASC)Pageable paginacao){
+    public ResponseEntity<Page<TopicoResponse>> listarTodosOsTopicos( @Parameter(hidden = true) @PageableDefault(size = 10, sort = "dataCriacao", direction = Sort.Direction.ASC)Pageable paginacao){
         Page<TopicoResponse> page =  service.listarTodosOsTopicos(paginacao);
         return ResponseEntity.ok(page);
     }
