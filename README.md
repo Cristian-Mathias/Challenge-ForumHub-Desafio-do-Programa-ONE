@@ -300,3 +300,16 @@ Alteração do status do tópico utilizando exclusão lógica.
 ![Inativação de tópico](docs/images/Exclusão-lógica-ativo.png)
 ![Inativação de tópico](docs/images/Exclusão-lógica-ativo2.png)
 
+---
+
+##  Documentação da API (Swagger)
+
+A documentação interativa da API está disponível via Swagger:
+
+🔗 **Swagger UI:**  
+http://localhost:8080/swagger-ui.html
+
+🔗 **OpenAPI (JSON):**  
+http://localhost:8080/v3/api-docs
+
+>  **OBSERVAÇÃO**: Para acessar endpoints protegidos no Swagger, utilize o botão **Authorize** e informe **apenas o token JWT**, sem o prefixo `Bearer`.
