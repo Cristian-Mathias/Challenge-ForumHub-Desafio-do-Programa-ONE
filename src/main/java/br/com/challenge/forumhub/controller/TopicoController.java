@@ -33,7 +33,7 @@ public class TopicoController {
     @PostMapping
     @Operation(
             summary = "Criar tópico",
-            description = "Cria um novo tópico no fórum. Não é permitido cadastrar tópicos duplicados."
+            description = "Cria um novo tópico no fórum. Não é permitido cadastrar tópicos com o mesmo título e mensagem!"
     )
     public ResponseEntity<TopicoResponse> criar(@RequestBody @Valid TopicoRequest request){
         TopicoResponse response = service.criar(request);
