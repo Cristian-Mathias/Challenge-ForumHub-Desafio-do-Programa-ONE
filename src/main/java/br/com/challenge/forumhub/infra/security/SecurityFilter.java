@@ -36,7 +36,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         return path.equals("/login")
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
-                || path.equals("/swagger-ui.html");
+                || path.equals("/swagger-ui.html")
+                || path.equals("/status");
     }
 
     @Override
