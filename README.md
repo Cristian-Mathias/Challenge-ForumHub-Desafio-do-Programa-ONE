@@ -307,7 +307,7 @@ Alteração do status do tópico utilizando exclusão lógica.
 A documentação interativa da API está disponível via Swagger:
 
 🔗 **Swagger UI:**  
-http://localhost:8080/swagger-ui.html
+http://localhost:8080/swagger-ui/index.html
 
 🔗 **OpenAPI (JSON):**  
 http://localhost:8080/v3/api-docs
