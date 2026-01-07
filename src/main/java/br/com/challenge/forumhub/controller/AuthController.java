@@ -5,6 +5,8 @@ import br.com.challenge.forumhub.domain.dto.DadosAutenticacao;
 import br.com.challenge.forumhub.domain.entity.Usuario;
 import br.com.challenge.forumhub.exception.TokenInvalidoException;
 import br.com.challenge.forumhub.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
+@Tag(
+        name = "Autenticação",
+        description = "Endpoints responsáveis pela autenticação e geração de token JWT"
+)
 public class AuthController {
 
     @Autowired
@@ -29,6 +35,10 @@ public class AuthController {
     private TokenService tokenService;
 
     @PostMapping
+    @Operation(
+            summary = "Efetuar login",
+            description = "Autentica o usuário e retorna um token JWT para acesso aos endpoints protegidos."
+    )
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosAutenticacao dados) {
 
         try {
