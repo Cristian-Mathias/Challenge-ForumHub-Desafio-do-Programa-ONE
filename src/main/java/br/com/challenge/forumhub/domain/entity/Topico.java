@@ -6,10 +6,12 @@ import br.com.challenge.forumhub.exception.TopicoJaInativoException;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
 @Table(name = "topicos")
 public class Topico {
 
@@ -20,16 +22,24 @@ public class Topico {
     private String titulo;
     @Column(nullable = false)
     private String mensagem;
-    @Column(name = "data_criacao", nullable = false)
-    private LocalDateTime dataCriacao;
+    @Column(name = "data_criacao", nullable = false, updatable = false)
+    private LocalDateTime dataCriacao = LocalDateTime.now();
     @Column(name = "estado_topico", nullable = false)
     @Enumerated(EnumType.STRING)
     private EstadoTopico estado;
-    private String autor;
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario autor;
     private String curso;
+    @OneToMany(mappedBy = "topico", cascade = CascadeType.ALL)
+    private List<Resposta> respostas = new ArrayList<>();
 
-    public String getAutor() {
+    public Usuario getAutor() {
         return autor;
+    }
+
+    public void setAutor(Usuario autor) {
+        this.autor = autor;
     }
 
     public String getCurso() {
@@ -56,9 +66,7 @@ public class Topico {
         return titulo;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+
 
     public void setCurso(String curso) {
         this.curso = curso;
@@ -80,9 +88,20 @@ public class Topico {
         this.titulo = titulo;
     }
 
-    @PrePersist
-    public void prePersist(){
-        this.dataCriacao = LocalDateTime.now();
+    public List<Resposta> getRespostas() {
+        return respostas;
+    }
+
+    public void setRespostas(List<Resposta> respostas) {
+        this.respostas = respostas;
+    }
+
+    public boolean isAtivo(){
+        return this.estado == EstadoTopico.ATIVO;
+    }
+
+    public boolean isInativo(){
+        return this.estado == EstadoTopico.INATIVO;
     }
 
     public void ativar(){

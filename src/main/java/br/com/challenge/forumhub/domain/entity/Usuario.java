@@ -1,7 +1,9 @@
 package br.com.challenge.forumhub.domain.entity;
 
+import br.com.challenge.forumhub.domain.enums.Perfil;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,23 +12,22 @@ import java.util.List;
 
 @Entity(name = "Usuario")
 @Table(name = "usuarios")
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
+    private String nome;
+    @Column(nullable = false, unique = true)
     private String login;
+    @Column(nullable = false)
     private String senha;
-
-    public Usuario() {
-    }
-
-    public Usuario(Long id, String login, String senha) {
-        this.id = id;
-        this.login = login;
-        this.senha = senha;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Perfil perfil;
 
     public Long getId() {
         return id;
@@ -40,9 +41,25 @@ public class Usuario implements UserDetails {
         return senha;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_"+ perfil.name()));
     }
 
     @Override

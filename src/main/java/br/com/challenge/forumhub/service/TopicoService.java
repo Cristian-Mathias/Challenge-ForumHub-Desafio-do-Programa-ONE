@@ -4,6 +4,7 @@ import br.com.challenge.forumhub.domain.dto.DadosAtualizacaoTopico;
 import br.com.challenge.forumhub.domain.dto.TopicoRequest;
 import br.com.challenge.forumhub.domain.dto.TopicoResponse;
 import br.com.challenge.forumhub.domain.entity.Topico;
+import br.com.challenge.forumhub.domain.entity.Usuario;
 import br.com.challenge.forumhub.domain.enums.EstadoTopico;
 import br.com.challenge.forumhub.domain.repository.TopicoRepository;
 import br.com.challenge.forumhub.exception.RecursoNaoEncontradoException;
@@ -24,7 +25,7 @@ public class TopicoService {
         this.repository = repository;
     }
 
-    public TopicoResponse criar(TopicoRequest request){
+    public TopicoResponse criar(TopicoRequest request, Usuario usuarioLogado){
 
         if (repository.existsByTituloAndMensagem(request.titulo(), request.mensagem())){
             throw new TopicoDuplicadoException("Já existe um tópico com o mesmo título e mensagem!");
@@ -34,7 +35,7 @@ public class TopicoService {
         Topico topico = new Topico();
         topico.setTitulo(request.titulo());
         topico.setMensagem(request.mensagem());
-        topico.setAutor(request.autor());
+        topico.setAutor(usuarioLogado);
         topico.setCurso(request.curso());
         topico.setEstado(EstadoTopico.ATIVO);
 
@@ -46,7 +47,7 @@ public class TopicoService {
                 salvo.getMensagem(),
                 salvo.getDataCriacao(),
                 salvo.getEstado(),
-                salvo.getAutor(),
+                salvo.getAutor().getNome(),
                 salvo.getCurso()
         );
     }
@@ -59,7 +60,7 @@ public class TopicoService {
                         t.getMensagem(),
                         t.getDataCriacao(),
                         t.getEstado(),
-                        t.getAutor(),
+                        t.getAutor().getNome(),
                         t.getCurso()
                 ));
     }
@@ -73,7 +74,7 @@ public class TopicoService {
                         t.getMensagem(),
                         t.getDataCriacao(),
                         t.getEstado(),
-                        t.getAutor(),
+                        t.getAutor().getNome(),
                         t.getCurso()
                 ));
     }
@@ -88,13 +89,13 @@ public class TopicoService {
                 topico.getMensagem(),
                 topico.getDataCriacao(),
                 topico.getEstado(),
-                topico.getAutor(),
+                topico.getAutor().getNome(),
                 topico.getCurso()
         );
     }
 
 
-    public TopicoResponse atualizar(Long id , DadosAtualizacaoTopico dados) {
+    public TopicoResponse atualizar(Long id , DadosAtualizacaoTopico dados, Usuario usuarioLogado) {
 
         Optional<Topico> optionalTopico = repository.findById(id);
 
@@ -108,7 +109,7 @@ public class TopicoService {
 
             topico.setTitulo(dados.titulo());
             topico.setMensagem(dados.mensagem());
-            topico.setAutor(dados.autor());
+            topico.setAutor(usuarioLogado);
             topico.setCurso(dados.curso());
 
             repository.save(topico);
@@ -119,7 +120,7 @@ public class TopicoService {
                     topico.getMensagem(),
                     topico.getDataCriacao(),
                     topico.getEstado(),
-                    topico.getAutor(),
+                    topico.getAutor().getNome(),
                     topico.getCurso()
             );
         }

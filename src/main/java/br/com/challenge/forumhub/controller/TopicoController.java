@@ -3,6 +3,7 @@ package br.com.challenge.forumhub.controller;
 import br.com.challenge.forumhub.domain.dto.DadosAtualizacaoTopico;
 import br.com.challenge.forumhub.domain.dto.TopicoRequest;
 import br.com.challenge.forumhub.domain.dto.TopicoResponse;
+import br.com.challenge.forumhub.domain.entity.Usuario;
 import br.com.challenge.forumhub.service.TopicoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Parameter;
 
@@ -35,8 +37,9 @@ public class TopicoController {
             summary = "Criar tópico",
             description = "Cria um novo tópico no fórum. Não é permitido cadastrar tópicos com o mesmo título e mensagem!"
     )
-    public ResponseEntity<TopicoResponse> criar(@RequestBody @Valid TopicoRequest request){
-        TopicoResponse response = service.criar(request);
+    public ResponseEntity<TopicoResponse> criar(@RequestBody @Valid TopicoRequest request, Authentication authentication){
+        Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
+        TopicoResponse response = service.criar(request,usuarioLogado);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -79,8 +82,9 @@ public class TopicoController {
             summary = "Atualizar tópico",
             description = "Atualiza completamente os dados de um tópico ativo."
     )
-    public ResponseEntity<TopicoResponse> atualizar(@PathVariable Long id , @RequestBody DadosAtualizacaoTopico dados){
-        TopicoResponse response = service.atualizar(id, dados);
+    public ResponseEntity<TopicoResponse> atualizar(@PathVariable Long id , @RequestBody DadosAtualizacaoTopico dados, Authentication authentication){
+        Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
+        TopicoResponse response = service.atualizar(id, dados,usuarioLogado);
         return ResponseEntity.ok(response);
     }
 

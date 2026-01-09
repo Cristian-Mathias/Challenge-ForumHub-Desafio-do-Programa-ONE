@@ -1,6 +1,5 @@
 package br.com.challenge.forumhub.infra.security;
 
-import br.com.challenge.forumhub.domain.dto.erro.ErroPadrao;
 import br.com.challenge.forumhub.domain.repository.UsuarioRepository;
 import br.com.challenge.forumhub.exception.TokenInvalidoException;
 import br.com.challenge.forumhub.service.TokenService;
@@ -15,9 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -50,15 +47,16 @@ public class SecurityFilter extends OncePerRequestFilter {
         String tokenJWT = recuperarToken(request);
 
         if (tokenJWT == null) {
-            throw new TokenInvalidoException("Token JWT não fornecido");
+            filterChain.doFilter(request, response);
+            return;
         }
+
         try {
             String subject = tokenService.getSubject(tokenJWT);
-            UserDetails usuario = repository.findByLogin(subject);
-
-            if (usuario == null) {
-                throw new TokenInvalidoException("Usuário não encontrado para este token");
-            }
+            UserDetails usuario = repository.findByLogin(subject)
+                    .orElseThrow(() ->
+                            new TokenInvalidoException("Usuário não encontrado para este token")
+                    );
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(
