@@ -300,6 +300,33 @@ Alteração do status do tópico utilizando exclusão lógica.
 ![Inativação de tópico](docs/images/Exclusão-lógica-ativo.png)
 ![Inativação de tópico](docs/images/Exclusão-lógica-ativo2.png)
 
+--- 
+## Outras Rotas (Opcional)
+> Implementei outras rotas na minha aplicação para complementar o fórum.  
+> As rotas adicionais criadas incluem:
+> - `/usuario` retorna as informações do usuário autenticado (método `me`) 
+> - `/respostas` — criar respostas e marcar uma como solução (métodos `criar()` e `marcarSolucao()`)
+
+### Perfil do usuário logado
+
+- Usuário logado
+![Outras Rotas Perfil do usuário logado](docs/images/usuario-logado.png)
+
+### Buscar tópico para criar a resposta
+
+- Get tópico
+![Outras Rotas Get tópico](docs/images/get-topicos.png)
+
+- Criando resposta para tópico com id 5
+![Outras Rotas criando resposta](docs/images/criando-resposta.png)
+![Outras Rotas resposta-banco de dados](docs/images/resposta-bd.png)
+
+### Definir resposta como solucionada
+
+- Alterando o status de uma resposta de `false` para `true`, indicando que a resposta foi definida como solucionada
+![Outras Rotas definir-solucionada](docs/images/definir-resposta-solucionada.png)
+![Outras Rotas definir-solucionada-bd](docs/images/definir-resposta-solucionada-bd.png)
+
 ---
 
 ##  Documentação da API (Swagger)
